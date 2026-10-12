@@ -1,0 +1,508 @@
+/* ==========================================================
+   Ram Vibhul Aanandh · Portfolio
+   Content data comes from his public profile (Himalayas / LinkedIn).
+   Demo lab entries are labelled demonstrations, not employer work.
+   ========================================================== */
+(function () {
+    'use strict';
+
+    var DEV = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/';
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var $ = function (s, r) { return (r || document).querySelector(s); };
+    var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+    var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+
+    /* ---------- data ---------- */
+    var SKILLS = [
+        { title: 'Cloud platforms', icon: 'bi-clouds-fill', items: [
+            ['AWS', 'amazonwebservices/amazonwebservices-original-wordmark', 1], ['Google Cloud', 'googlecloud/googlecloud-original'],
+            ['Azure', 'azure/azure-original'], ['OpenStack', 'openstack/openstack-original'], ['Cloudflare', 'cloudflare/cloudflare-original'],
+            ['EC2 · S3 · ELB', 'bi-hdd-stack'], ['Lambda', 'bi-lightning-charge'], ['Fargate', 'bi-box'] ] },
+        { title: 'Containers & orchestration', icon: 'bi-boxes', items: [
+            ['Kubernetes', 'kubernetes/kubernetes-original'], ['Docker', 'docker/docker-original'], ['Helm', 'helm/helm-original'],
+            ['GKE', 'googlecloud/googlecloud-original'], ['AKS', 'azure/azure-original'], ['Docker Swarm', 'docker/docker-original'],
+            ['Istio', 'bi-diagram-3'], ['Traefik', 'traefikproxy/traefikproxy-original'] ] },
+        { title: 'Infrastructure as code', icon: 'bi-code-square', items: [
+            ['Terraform', 'terraform/terraform-original'], ['Ansible', 'ansible/ansible-original', 1], ['CloudFormation', 'bi-stack'],
+            ['Consul', 'consul/consul-original'], ['Python', 'python/python-original'], ['Go', 'go/go-original-wordmark'],
+            ['Bash', 'bash/bash-original', 1], ['Java', 'java/java-original'] ] },
+        { title: 'CI/CD & delivery', icon: 'bi-arrow-repeat', items: [
+            ['GitHub Actions', 'githubactions/githubactions-original'], ['Jenkins', 'jenkins/jenkins-original'], ['ArgoCD', 'argocd/argocd-original'],
+            ['GitHub', 'github/github-original', 1], ['Bitbucket', 'bitbucket/bitbucket-original'], ['Git', 'git/git-original'],
+            ['TeamCity', 'bi-cpu'], ['CodePipeline', 'bi-signpost-2'] ] },
+        { title: 'Observability', icon: 'bi-graph-up-arrow', items: [
+            ['Prometheus', 'prometheus/prometheus-original'], ['Grafana', 'grafana/grafana-original'], ['Elasticsearch', 'elasticsearch/elasticsearch-original'],
+            ['Kibana', 'kibana/kibana-original'], ['Logstash', 'logstash/logstash-original'], ['Datadog', 'datadog/datadog-original', 1],
+            ['Loki · Thanos', 'bi-bar-chart-line'], ['Fluent Bit', 'bi-funnel'] ] },
+        { title: 'Data, OS & web', icon: 'bi-database-fill', items: [
+            ['Linux', 'linux/linux-original'], ['Ubuntu', 'ubuntu/ubuntu-original'], ['CentOS', 'centos/centos-original'],
+            ['PostgreSQL', 'postgresql/postgresql-original'], ['MySQL', 'mysql/mysql-original'], ['MongoDB', 'mongodb/mongodb-original'],
+            ['Nginx', 'nginx/nginx-original'], ['ZooKeeper', 'bi-diagram-2'] ] },
+        { title: 'Security & access', icon: 'bi-shield-lock-fill', items: [
+            ['Snyk', 'bi-bug'], ['SonarQube', 'sonarqube/sonarqube-original'], ['Checkmarx', 'bi-shield-check'],
+            ['OWASP ZAP', 'bi-shield-exclamation'], ['Keycloak', 'bi-key'], ['Teleport', 'bi-door-open'],
+            ['AWS IAM', 'bi-person-lock'], ['jFrog', 'bi-archive'] ] }
+    ];
+
+    var CAREER = [
+        { id: 'severalnines', role: 'Senior DevOps Engineer', co: 'Severalnines', logo: 'S9', date: 'Jun 2023 – Present', current: true,
+          pts: ['Built Kubernetes scaling strategies using Spot Instances, achieving significant cost savings.', 'Containerized applications and ran multi-environment cloud infrastructure.'],
+          tags: ['Kubernetes', 'GKE', 'Helm', 'Terraform', 'MySQL', 'PostgreSQL', 'Grafana', 'Cloudflare', 'Snyk'] },
+        { id: 'hometogo', role: 'Senior Cloud Engineer', co: 'HomeToGo', logo: 'HG', date: 'Oct 2021 – Jun 2023',
+          pts: ['Automated DNS management using Kubernetes and cert-manager.', 'Built CI/CD pipelines and managed infrastructure with Terraform.'],
+          tags: ['Kubernetes', 'Terraform', 'AWS', 'Azure', 'GitHub Actions', 'ArgoCD', 'Fluent Bit', 'Prometheus', 'Grafana'] },
+        { id: 'freshworks', role: 'Lead Cloud Engineer / Site Reliability Engineer', co: 'Freshworks', logo: 'FW', date: 'Dec 2019 – Jan 2022',
+          pts: ['Designed and operated highly available systems on AWS.', 'Cut costs and improved efficiency through automation and monitoring.'],
+          tags: ['AWS', 'Terraform', 'Kubernetes', 'Prometheus', 'Grafana', 'Ansible', 'Consul', 'Docker'] },
+        { id: 'bosch', role: 'Senior DevOps Engineer', co: 'Robert Bosch GmbH', logo: 'RB', date: 'May 2018 – Dec 2019',
+          pts: ['Implemented a production-ready container orchestration infrastructure using Docker and Kubernetes.'],
+          tags: ['Docker', 'Kubernetes', 'Jenkins', 'Ansible', 'ELK Stack', 'Prometheus', 'Grafana', 'Traefik'] },
+        { id: 'infosys-sce', role: 'Senior Cloud Engineer', co: 'Infosys', logo: 'IN', date: 'Jan 2017 – Jan 2018',
+          pts: ['Ran AWS components and automated infrastructure migrations, with monitoring and logging in place.'],
+          tags: ['AWS', 'Terraform', 'CloudFormation', 'Jenkins', 'Linux', 'RDBMS', 'ELB'] },
+        { id: 'infosys-ce2', role: 'Cloud Engineer', co: 'Infosys', logo: 'IN', date: 'Mar 2017 – Sep 2017',
+          pts: ['Deployed and maintained production environments on AWS.', 'Used scripting and CI/CD to automate delivery.'],
+          tags: ['AWS', 'Docker', 'Jenkins', 'Python', 'Maven', 'S3', 'EC2', 'ELB'] },
+        { id: 'infosys-ce1', role: 'Cloud Engineer', co: 'Infosys', logo: 'IN', date: 'Apr 2016 – Apr 2017',
+          pts: ['Built and deployed Java applications on AWS with high-availability and security measures.'],
+          tags: ['AWS', 'Jenkins', 'Terraform', 'S3', 'EC2', 'Java', 'Linux'] },
+        { id: 'infosys-devops', role: 'DevOps Engineer', co: 'Infosys', logo: 'IN', date: 'Feb 2015 – Apr 2016',
+          pts: ['Created Ansible playbooks for configuration management.', 'Automated application deployments.'],
+          tags: ['Ansible', 'Jenkins', 'Git', 'Python', 'Docker', 'AWS', 'Linux'] }
+    ];
+
+    var FEATURED = [
+        { flagship: true, ref: 'severalnines', co: 'Severalnines · 2023 – now', cat: 'Kubernetes · Cost',
+          title: 'Cost-aware Kubernetes scaling with Spot capacity',
+          desc: 'Built Kubernetes scaling strategies around Spot Instances to achieve significant cost savings, while running containerized apps across multiple cloud environments.',
+          steps: ['Split capacity into on-demand and Spot node pools, all defined in Terraform.', 'Taint Spot pools so only interruption-tolerant workloads schedule there.', 'Pair Helm releases with disruption budgets so preemptions stay invisible.', 'Track capacity mix and spend on Grafana dashboards.'],
+          metrics: [['Spot', 'capacity strategy'], ['Significant', 'cost savings'], ['Multi-env', 'cloud infra']],
+          tags: ['Kubernetes', 'GKE', 'Helm', 'Terraform', 'Grafana'],
+          file: 'node_pools.tf',
+          code: '# Illustrative pattern: a Spot node pool on GKE\nresource "google_container_node_pool" "spot" {\n  name    = "spot-pool"\n  cluster = google_container_cluster.main.id\n\n  autoscaling {\n    min_node_count = 0\n    max_node_count = var.spot_max\n  }\n\n  node_config {\n    spot         = true\n    machine_type = var.machine_type\n    taint {\n      key    = "capacity"\n      value  = "spot"\n      effect = "NO_SCHEDULE"\n    }\n  }\n}' },
+        { ref: 'hometogo', co: 'HomeToGo · 2021 – 2023', cat: 'Kubernetes · Automation',
+          title: 'Automated DNS & certificates on Kubernetes',
+          desc: 'Automated DNS management with Kubernetes and cert-manager, alongside CI/CD pipelines and Terraform-managed infrastructure.',
+          tags: ['Kubernetes', 'cert-manager', 'Terraform', 'GitHub Actions', 'ArgoCD'],
+          file: 'certificate.yaml',
+          code: '# Illustrative pattern: cert-manager Certificate\napiVersion: cert-manager.io/v1\nkind: Certificate\nmetadata:\n  name: app-tls\nspec:\n  secretName: app-tls\n  issuerRef:\n    name: letsencrypt\n    kind: ClusterIssuer\n  dnsNames:\n    - "app.example.com"' },
+        { ref: 'freshworks', co: 'Freshworks · 2019 – 2022', cat: 'AWS · SRE',
+          title: 'Highly available systems on AWS',
+          desc: 'Designed and operated highly available systems on AWS, cutting costs and improving efficiency through automation and monitoring.',
+          tags: ['AWS', 'Terraform', 'Kubernetes', 'Prometheus', 'Consul'],
+          file: 'alerts.yaml',
+          code: '# Illustrative pattern: Prometheus alert rule\ngroups:\n  - name: availability\n    rules:\n      - alert: HighErrorRate\n        expr: |\n          sum(rate(http_requests_total{code=~"5.."}[5m]))\n          / sum(rate(http_requests_total[5m])) > 0.02\n        for: 10m\n        labels:\n          severity: page' },
+        { ref: 'bosch', co: 'Robert Bosch GmbH · 2018 – 2019', cat: 'Containers · Platform',
+          title: 'Production-ready container orchestration',
+          desc: 'Implemented a production-ready container orchestration infrastructure with Docker and Kubernetes, with Jenkins, Ansible, ELK and Traefik around it.',
+          tags: ['Docker', 'Kubernetes', 'Jenkins', 'Ansible', 'ELK', 'Traefik'],
+          file: 'Jenkinsfile',
+          code: '// Illustrative pattern: build & roll out\npipeline {\n  agent any\n  stages {\n    stage("Build")  { steps { sh "docker build -t $IMAGE ." } }\n    stage("Push")   { steps { sh "docker push $IMAGE" } }\n    stage("Deploy") {\n      steps { sh "kubectl set image deploy/app app=$IMAGE" }\n    }\n  }\n}' },
+        { ref: 'infosys-sce', co: 'Infosys · 2015 – 2018', cat: 'AWS · Migration',
+          title: 'Automated infrastructure migrations on AWS',
+          desc: 'Ran AWS components and automated infrastructure migrations with Terraform and CloudFormation, plus Ansible playbooks for configuration management.',
+          tags: ['AWS', 'Terraform', 'CloudFormation', 'Ansible', 'Jenkins'],
+          file: 'site.yml',
+          code: '# Illustrative pattern: Ansible playbook\n- hosts: app_servers\n  become: true\n  roles:\n    - common\n    - java_runtime\n    - app_deploy\n  vars:\n    app_version: "{{ release }}"' }
+    ];
+
+    var PROJECTS = [
+        { cat: 'kubernetes', label: 'Kubernetes', icon: 'bi-diagram-3-fill', title: 'GitOps cluster bootstrap',
+          desc: 'An app-of-apps ArgoCD layout that brings a fresh cluster to a known state from a single Git repo.',
+          points: ['App-of-apps pattern with environment overlays', 'Helm charts pinned by version', 'Sync waves for CRDs before workloads'],
+          tags: ['ArgoCD', 'Helm', 'Kubernetes', 'Kustomize'], file: 'root-app.yaml',
+          code: 'apiVersion: argoproj.io/v1alpha1\nkind: Application\nmetadata:\n  name: platform-root\n  namespace: argocd\nspec:\n  project: default\n  source:\n    repoURL: "https://git.example.com/platform.git"\n    path: apps/overlays/prod\n  destination:\n    server: "https://kubernetes.default.svc"\n  syncPolicy:\n    automated: { prune: true, selfHeal: true }' },
+        { cat: 'kubernetes', label: 'Kubernetes', icon: 'bi-lightning-charge-fill', title: 'Spot-tolerant workload template',
+          desc: 'A Helm chart template that schedules stateless services on Spot nodes safely.',
+          points: ['Tolerations and node affinity for Spot pools', 'PodDisruptionBudget defaults', 'Graceful shutdown with preStop hooks'],
+          tags: ['Helm', 'Kubernetes', 'GKE'], file: 'values.yaml',
+          code: 'tolerations:\n  - key: capacity\n    value: spot\n    effect: NoSchedule\naffinity:\n  nodeAffinity:\n    preferredDuringSchedulingIgnoredDuringExecution:\n      - weight: 80\n        preference:\n          matchExpressions:\n            - { key: capacity, operator: In, values: [spot] }\npdb:\n  minAvailable: 2' },
+        { cat: 'iac', label: 'IaC', icon: 'bi-bricks', title: 'Multi-environment Terraform layout',
+          desc: 'Reusable modules with per-environment stacks, remote state and locking.',
+          points: ['Module-per-concern layout (network, cluster, data)', 'Remote state with locking', 'Plan on PR, apply on merge'],
+          tags: ['Terraform', 'AWS', 'GCP'], file: 'envs/prod/main.tf',
+          code: 'module "network" {\n  source   = "../../modules/network"\n  cidr     = "10.20.0.0/16"\n  env      = "prod"\n}\n\nmodule "cluster" {\n  source     = "../../modules/cluster"\n  subnet_ids = module.network.private_subnets\n  env        = "prod"\n}' },
+        { cat: 'iac', label: 'IaC', icon: 'bi-terminal-fill', title: 'Hardened Linux baseline with Ansible',
+          desc: 'Idempotent roles that bring Ubuntu and CentOS hosts to a consistent, hardened baseline.',
+          points: ['SSH hardening and user management', 'Package pinning and unattended upgrades', 'Node exporter for Prometheus'],
+          tags: ['Ansible', 'Linux', 'Ubuntu', 'CentOS'], file: 'roles/baseline/tasks/main.yml',
+          code: '- name: Disable password SSH logins\n  ansible.builtin.lineinfile:\n    path: /etc/ssh/sshd_config\n    regexp: "^PasswordAuthentication"\n    line: "PasswordAuthentication no"\n  notify: restart sshd\n\n- name: Install node exporter\n  ansible.builtin.package:\n    name: prometheus-node-exporter\n    state: present' },
+        { cat: 'cicd', label: 'CI/CD', icon: 'bi-github', title: 'Reusable GitHub Actions pipeline',
+          desc: 'A shared workflow that builds, scans and deploys a container with Helm.',
+          points: ['Reusable workflow called from service repos', 'Dependency scan gate before deploy', 'Environment protection rules for prod'],
+          tags: ['GitHub Actions', 'Docker', 'Snyk', 'Helm'], file: '.github/workflows/deploy.yml',
+          code: 'on:\n  workflow_call:\n    inputs:\n      env: { type: string, required: true }\njobs:\n  ship:\n    runs-on: ubuntu-latest\n    environment: ${{ inputs.env }}\n    steps:\n      - uses: actions/checkout@v4\n      - run: docker build -t "$IMAGE" .\n      - run: snyk container test "$IMAGE"\n      - run: helm upgrade --install app ./chart' },
+        { cat: 'cicd', label: 'CI/CD', icon: 'bi-gear-wide-connected', title: 'Jenkins shared library',
+          desc: 'Standard build, test and release stages packaged as a Jenkins shared library.',
+          points: ['One-line pipelines for service teams', 'SonarQube quality gate step', 'Consistent artifact versioning'],
+          tags: ['Jenkins', 'Groovy', 'SonarQube'], file: 'vars/standardPipeline.groovy',
+          code: 'def call(Map cfg) {\n  pipeline {\n    agent any\n    stages {\n      stage("Test")    { steps { sh cfg.testCmd } }\n      stage("Quality") { steps { withSonarQubeEnv("sonar") { sh "sonar-scanner" } } }\n      stage("Release") { steps { sh "make release" } }\n    }\n  }\n}' },
+        { cat: 'cicd', label: 'CI/CD', icon: 'bi-shuffle', title: 'Blue/green releases behind a load balancer',
+          desc: 'A release flow that shifts traffic between two target groups and rolls back fast.',
+          points: ['Health-checked target group swap', 'Instant rollback path', 'Release notes generated from commits'],
+          tags: ['AWS', 'ELB', 'Terraform'], file: 'switch.sh',
+          code: '#!/usr/bin/env bash\nset -euo pipefail\n# swap listener to the idle (green) target group\naws elbv2 modify-listener \\\n  --listener-arn "$LISTENER_ARN" \\\n  --default-actions Type=forward,TargetGroupArn="$GREEN_TG"' },
+        { cat: 'observability', label: 'Observability', icon: 'bi-speedometer2', title: 'SLO dashboards & alerting',
+          desc: 'Error-budget based alerts and Grafana dashboards for request-driven services.',
+          points: ['Multi-window burn-rate alerts', 'Dashboards provisioned as code', 'Runbook links on every alert'],
+          tags: ['Prometheus', 'Grafana', 'Thanos'], file: 'slo-rules.yaml',
+          code: '- alert: ErrorBudgetBurn\n  expr: |\n    job:slo_errors:ratio_rate1h > (14.4 * 0.001)\n    and job:slo_errors:ratio_rate5m > (14.4 * 0.001)\n  labels: { severity: page }\n  annotations:\n    runbook: "https://runbooks.example.com/error-budget"' },
+        { cat: 'observability', label: 'Observability', icon: 'bi-journal-text', title: 'Centralized logging pipeline',
+          desc: 'Fluent Bit ships container logs to Loki with labels that match Prometheus metrics.',
+          points: ['DaemonSet collectors with backpressure', 'Shared labels for metrics/log correlation', 'Retention per namespace'],
+          tags: ['Fluent Bit', 'Loki', 'Grafana', 'Kubernetes'], file: 'fluent-bit.conf',
+          code: '[INPUT]\n    Name   tail\n    Path   /var/log/containers/*.log\n    Tag    kube.*\n\n[FILTER]\n    Name   kubernetes\n    Match  kube.*\n\n[OUTPUT]\n    Name   loki\n    Match  kube.*\n    Host   loki.monitoring.svc' }
+    ];
+
+    var PIPE = [
+        { t: 'Commit', ph: 'Code', ic: 'bi-git', cap: 'A change lands on a branch.', tech: 'Trunk-based branches and pull requests', stack: ['Git', 'GitHub', 'Bitbucket'], log: ['$ git push origin feat/scale', '→ PR opened, checks queued'] },
+        { t: 'Lint', ph: 'Code', ic: 'bi-check2-square', cap: 'Config and code are checked before anything runs.', tech: 'Format, lint and policy checks on every PR', stack: ['GitHub Actions', 'terraform fmt'], log: ['$ terraform fmt -check', '$ helm lint ./chart', '✓ 0 issues'] },
+        { t: 'Build', ph: 'Build', ic: 'bi-box-seam', cap: 'A versioned container image is produced.', tech: 'Reproducible, cached image builds', stack: ['Docker', 'Jenkins'], log: ['$ docker build -t app:sha-1a2b .', '✓ image built'] },
+        { t: 'Scan', ph: 'Secure', ic: 'bi-shield-check', cap: 'Dependencies and images are scanned for vulnerabilities.', tech: 'Shift-left security gates', stack: ['Snyk', 'SonarQube', 'Checkmarx'], log: ['$ snyk container test app:sha-1a2b', '✓ gate passed'] },
+        { t: 'Test', ph: 'Build', ic: 'bi-bug', cap: 'Unit and integration suites run in parallel.', tech: 'Parallel jobs, fail fast', stack: ['JUnit', 'Python'], log: ['$ make test', '✓ suites green'] },
+        { t: 'Publish', ph: 'Release', ic: 'bi-archive', cap: 'The artifact is pushed to a registry.', tech: 'Immutable tags, promoted between envs', stack: ['jFrog', 'Registry'], log: ['$ docker push app:sha-1a2b', '✓ pushed'] },
+        { t: 'Plan', ph: 'Infra', ic: 'bi-map', cap: 'Infrastructure changes are previewed for review.', tech: 'Plan on PR, human approval', stack: ['Terraform'], log: ['$ terraform plan -out=tfplan', '→ awaiting approval'] },
+        { t: 'Apply', ph: 'Infra', ic: 'bi-hammer', cap: 'Approved infrastructure changes are applied.', tech: 'Locked remote state, idempotent apply', stack: ['Terraform', 'Ansible'], log: ['$ terraform apply tfplan', '✓ apply complete'] },
+        { t: 'Deploy', ph: 'Release', ic: 'bi-rocket-takeoff', cap: 'Workloads roll out progressively to the cluster.', tech: 'GitOps sync with rolling updates', stack: ['ArgoCD', 'Helm', 'Kubernetes'], log: ['$ argocd app sync app-prod', '✓ rollout healthy'] },
+        { t: 'Observe', ph: 'Operate', ic: 'bi-activity', cap: 'Metrics, logs and alerts confirm the release is healthy.', tech: 'Dashboards and alert rules as code', stack: ['Prometheus', 'Grafana', 'Loki'], log: ['$ watch golden signals', '✓ SLOs within budget'] }
+    ];
+
+    /* ---------- theme ---------- */
+    var root = document.documentElement;
+    $('#themeToggle').addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    /* ---------- nav ---------- */
+    var navShell = $('#navShell'), navLinks = $('#navLinks'), navToggle = $('#navToggle'), navOverlay = $('#navOverlay');
+    function setMenu(open) {
+        navLinks.classList.toggle('open', open);
+        navOverlay.classList.toggle('open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    navToggle.addEventListener('click', function () { setMenu(!navLinks.classList.contains('open')); });
+    $('#navClose').addEventListener('click', function () { setMenu(false); });
+    navOverlay.addEventListener('click', function () { setMenu(false); });
+    $$('a', navLinks).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+
+    var progress = $('#scrollProgress'), toTop = $('#toTop');
+    function onScroll() {
+        var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+        navShell.classList.toggle('scrolled', y > 20);
+        progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+        toTop.classList.toggle('show', y > 700);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var navMap = {};
+    $$('.nav-link').forEach(function (a) { navMap[a.getAttribute('href').slice(1)] = a; });
+    var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            var id = e.target.id === 'strengths' ? 'projects' : e.target.id;
+            if (!navMap[id]) return;
+            $$('.nav-link').forEach(function (a) { a.classList.remove('active'); });
+            navMap[id].classList.add('active');
+        });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    $$('main section[id]').forEach(function (s) { spy.observe(s); });
+
+    /* ---------- typing word ---------- */
+    (function () {
+        var words = ['reliable', 'automated', 'observable', 'cost-aware', 'boring'];
+        var el = $('#typeword'); if (!el || reduceMotion) return;
+        var wi = 0, ci = words[0].length, del = true;
+        function tick() {
+            var w = words[wi];
+            if (del) { ci--; el.textContent = w.slice(0, ci); if (ci === 0) { del = false; wi = (wi + 1) % words.length; } setTimeout(tick, 45); }
+            else { var nw = words[wi]; ci++; el.textContent = nw.slice(0, ci); if (ci === nw.length) { del = true; setTimeout(tick, 2200); } else setTimeout(tick, 85); }
+        }
+        setTimeout(tick, 2600);
+    })();
+
+    /* ---------- counters ---------- */
+    var counterIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            counterIO.unobserve(e.target);
+            var el = e.target, to = +el.dataset.to, t0 = performance.now(), dur = reduceMotion ? 1 : 1400;
+            (function step(t) {
+                var p = Math.min(1, (t - t0) / dur);
+                el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+                if (p < 1) requestAnimationFrame(step);
+            })(t0);
+        });
+    }, { threshold: .6 });
+    $$('.counter').forEach(function (c) { counterIO.observe(c); });
+
+    /* ---------- marquee duplicate ---------- */
+    var mt = $('#marqueeTrack'); if (mt) mt.innerHTML += mt.innerHTML;
+
+    /* ---------- skills ---------- */
+    $('#skillGroups').innerHTML = SKILLS.map(function (g, gi) {
+        return '<div class="skill-group reveal" style="transition-delay:' + (gi % 2) * 80 + 'ms"><div class="sg-head"><h3><i class="bi ' + g.icon + '"></i>' + esc(g.title) + '</h3><span>' + String(g.items.length).padStart(2, '0') + '</span></div><div class="chip-grid">' +
+            g.items.map(function (it) {
+                var ic = it[1].indexOf('bi-') === 0
+                    ? '<i class="tc-ic bi ' + it[1] + '"></i>'
+                    : '<img src="' + DEV + it[1] + '.svg" alt="" width="20" height="20" loading="lazy" decoding="async"' + (it[2] ? ' class="inv"' : '') + ' onerror="this.replaceWith(Object.assign(document.createElement(\'i\'),{className:\'tc-ic bi bi-box\'}))" />';
+                return '<div class="tech-chip">' + ic + '<span>' + esc(it[0]) + '</span></div>';
+            }).join('') + '</div></div>';
+    }).join('');
+
+    /* ---------- career timeline ---------- */
+    var tl = $('#timeline');
+    tl.innerHTML = CAREER.map(function (r, i) {
+        return '<li class="tl-item reveal' + (r.current ? ' current' : '') + (i === 0 ? ' open' : '') + '" id="role-' + r.id + '">' +
+            '<div class="tl-card"><button type="button" class="tl-top" aria-expanded="' + (i === 0) + '" aria-controls="tlb-' + r.id + '">' +
+            '<span class="tl-logo">' + r.logo + '</span><span class="tl-main"><span class="tl-role">' + esc(r.role) + '</span><span class="tl-co">' + esc(r.co) + '</span></span>' +
+            '<span class="tl-date">' + r.date + '</span><i class="bi bi-chevron-down tl-chev"></i></button>' +
+            '<div class="tl-body" id="tlb-' + r.id + '"><div><ul>' + r.pts.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
+            '<div class="tl-tags">' + r.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div></div></div></div></li>';
+    }).join('');
+    function openRole(li, force) {
+        var open = force === undefined ? !li.classList.contains('open') : force;
+        li.classList.toggle('open', open);
+        $('.tl-top', li).setAttribute('aria-expanded', String(open));
+    }
+    $$('.tl-item', tl).forEach(function (li) { $('.tl-top', li).addEventListener('click', function () { openRole(li); }); });
+
+    /* ---------- code highlighting (tiny) ---------- */
+    function hl(code) {
+        return esc(code).split('\n').map(function (line) {
+            var m = line.match(/^(\s*)(#|\/\/)(.*)$/);
+            if (m) return m[1] + '<span class="c">' + m[2] + m[3] + '</span>';
+            return line
+                .replace(/(&quot;[^&]*?&quot;)/g, '<span class="s">$1</span>')
+                .replace(/^(\s*-?\s*)([A-Za-z_][\w.\-\/]*)(:)(?=\s|$)/, '$1<span class="k">$2</span>$3')
+                .replace(/^(\s*)(resource|module|pipeline|stage|def|apiVersion|kind|\[\w+\])/, '$1<span class="n">$2</span>');
+        }).join('\n');
+    }
+
+    /* ---------- featured case studies ---------- */
+    $('#featuredGrid').innerHTML = FEATURED.map(function (f) {
+        return '<article class="featured-card reveal' + (f.flagship ? ' flagship' : '') + '">' +
+            '<div class="fc-visual"><span class="fc-tag">' + esc(f.cat) + '</span><div class="code-win"><div class="cw-bar"><i></i><i></i><i></i><span>' + esc(f.file) + '</span></div><pre><code>' + hl(f.code) + '</code></pre></div>' +
+            '<p class="fc-note"><i class="bi bi-info-circle"></i> Illustrative pattern, not production code</p></div>' +
+            '<div class="fc-body"><span class="fc-co">' + esc(f.co) + '</span><h3>' + esc(f.title) + '</h3><p>' + esc(f.desc) + '</p>' +
+            (f.steps ? '<ol class="fc-steps">' + f.steps.map(function (s, i) { return '<li><b>0' + (i + 1) + '</b><span>' + esc(s) + '</span></li>'; }).join('') + '</ol>' : '') +
+            (f.metrics ? '<div class="fc-metrics">' + f.metrics.map(function (m) { return '<div><b>' + esc(m[0]) + '</b><span>' + esc(m[1]) + '</span></div>'; }).join('') + '</div>' : '') +
+            '<div class="fc-tags">' + f.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+            '<div class="fc-links"><button type="button" class="link-arrow" data-role="' + f.ref + '">View role in timeline <i class="bi bi-arrow-right"></i></button>' +
+            '<a class="link-arrow" href="#contact">Discuss this work <i class="bi bi-arrow-right"></i></a></div></div></article>';
+    }).join('');
+    $$('[data-role]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            var li = document.getElementById('role-' + b.dataset.role);
+            if (!li) return;
+            openRole(li, true);
+            li.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        });
+    });
+
+    /* ---------- demo lab archive ---------- */
+    var CATS = [['all', 'All'], ['kubernetes', 'Kubernetes'], ['iac', 'IaC'], ['cicd', 'CI/CD'], ['observability', 'Observability']];
+    var filterBar = $('#filterBar'), grid = $('#archiveGrid'), count = $('#archiveCount');
+    filterBar.innerHTML = CATS.map(function (c, i) {
+        var n = c[0] === 'all' ? PROJECTS.length : PROJECTS.filter(function (p) { return p.cat === c[0]; }).length;
+        return '<button type="button" role="tab" aria-selected="' + (i === 0) + '" data-cat="' + c[0] + '"' + (i === 0 ? ' class="on"' : '') + '>' + c[1] + ' <em>' + n + '</em></button>';
+    }).join('');
+    function renderProjects(cat) {
+        var list = PROJECTS.map(function (p, i) { return [p, i]; }).filter(function (x) { return cat === 'all' || x[0].cat === cat; });
+        grid.innerHTML = list.map(function (x, k) {
+            var p = x[0];
+            return '<article class="project-card" style="animation-delay:' + k * 60 + 'ms"><div class="pc-thumb"><span class="pc-demo">Demo</span><i class="bi ' + p.icon + '"></i></div>' +
+                '<div class="pc-body"><span class="pc-cat">' + p.label + '</span><h3>' + esc(p.title) + '</h3><p>' + esc(p.desc) + '</p>' +
+                '<div class="pc-tags">' + p.tags.slice(0, 3).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + (p.tags.length > 3 ? '<span>+' + (p.tags.length - 3) + '</span>' : '') + '</div>' +
+                '<button type="button" class="link-arrow" data-proj="' + x[1] + '">Details <i class="bi bi-arrow-right"></i></button></div></article>';
+        }).join('');
+        count.textContent = 'Showing ' + list.length + ' of ' + PROJECTS.length + ' demo projects';
+    }
+    filterBar.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        $$('button', filterBar).forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); });
+        renderProjects(b.dataset.cat);
+    });
+    renderProjects('all');
+
+    /* ---------- modal ---------- */
+    var modal = $('#projModal'), lastFocus = null;
+    function openModal(p) {
+        lastFocus = document.activeElement;
+        $('#pmBadge').textContent = 'Demo · ' + p.label;
+        $('#pmTitle').textContent = p.title;
+        $('#pmDesc').textContent = p.desc + ' This is a demonstration blueprint, not a client or employer project.';
+        $('#pmPoints').innerHTML = p.points.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('');
+        $('#pmFile').textContent = p.file;
+        $('#pmCode').innerHTML = hl(p.code);
+        $('#pmTags').innerHTML = p.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('');
+        modal.hidden = false;
+        document.body.classList.add('modal-open');
+        $('.modal-x', modal).focus();
+    }
+    function closeModal() {
+        modal.hidden = true;
+        document.body.classList.remove('modal-open');
+        if (lastFocus) lastFocus.focus();
+    }
+    grid.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-proj]'); if (b) openModal(PROJECTS[+b.dataset.proj]);
+    });
+    $$('[data-close]', modal).forEach(function (el) { el.addEventListener('click', closeModal); });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { if (!modal.hidden) closeModal(); setMenu(false); }
+    });
+
+    /* ---------- hero pipeline walkthrough ---------- */
+    (function () {
+        var flow = $('#pxFlow'), steps = $('#pxSteps'), log = $('#pxLog'), all = $('#pxAll');
+        var cur = 0, playing = !reduceMotion, speed = 1, t0 = 0, raf = 0, DUR = 3600;
+        flow.innerHTML = PIPE.map(function (s, i) { return '<button type="button" class="px-node" data-i="' + i + '" aria-label="Step ' + (i + 1) + ': ' + s.t + '"><span class="px-ic"><i class="bi ' + s.ic + '"></i></span>' + s.t + '</button>'; }).join('');
+        steps.innerHTML = PIPE.map(function (s, i) { return '<button type="button" role="tab" data-i="' + i + '" aria-label="' + s.t + '"></button>'; }).join('');
+        all.innerHTML = PIPE.map(function (s, i) { return '<button type="button" data-i="' + i + '"><b>' + String(i + 1).padStart(2, '0') + '</b>' + s.t + ' · ' + s.ph + '</button>'; }).join('');
+        function pad(n) { return String(n).padStart(2, '0'); }
+        function show(i) {
+            cur = (i + PIPE.length) % PIPE.length;
+            var s = PIPE[cur], nx = PIPE[(cur + 1) % PIPE.length];
+            $('#pxNum').textContent = pad(cur + 1) + ' / ' + PIPE.length;
+            $('#pxPhase').textContent = s.ph;
+            $('#pxTitle').textContent = s.t;
+            $('#pxCap').textContent = s.cap;
+            $('#pxTech').textContent = s.tech;
+            $('#pxStack').innerHTML = s.stack.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('');
+            $('#pxNextLbl').textContent = pad((cur + 1) % PIPE.length + 1) + ' ' + nx.t;
+            $$('.px-node', flow).forEach(function (n, k) { n.classList.toggle('on', k === cur); n.classList.toggle('done', k < cur); });
+            $$('button', steps).forEach(function (n, k) { n.classList.toggle('on', k === cur); n.classList.toggle('done', k < cur); n.setAttribute('aria-selected', String(k === cur)); });
+            $$('button', all).forEach(function (n, k) { n.classList.toggle('on', k === cur); });
+            log.innerHTML = s.log.map(function (l, k) {
+                var cls = l.charAt(0) === '$' ? 'cmd' : (l.charAt(0) === '✓' ? 'ok' : '');
+                return '<span class="' + cls + '" style="animation-delay:' + k * 220 + 'ms">' + esc(l) + '</span>';
+            }).join('');
+            t0 = performance.now();
+        }
+        function loop(t) {
+            if (playing) {
+                var p = (t - t0) / (DUR / speed);
+                $('#pxBar').style.width = Math.min(100, p * 100) + '%';
+                if (p >= 1) show(cur + 1);
+            }
+            raf = requestAnimationFrame(loop);
+        }
+        function setPlay(v) {
+            playing = v;
+            var b = $('#pxPlay');
+            b.innerHTML = '<i class="bi ' + (v ? 'bi-pause-fill' : 'bi-play-fill') + '"></i>';
+            b.setAttribute('aria-label', v ? 'Pause the tour' : 'Resume the tour');
+            if (v) t0 = performance.now() - (parseFloat($('#pxBar').style.width) || 0) / 100 * (DUR / speed);
+        }
+        function jump(i) { show(i); if (!playing) $('#pxBar').style.width = '0%'; }
+        $('#pxPrev').addEventListener('click', function () { jump(cur - 1); });
+        $('#pxNext').addEventListener('click', function () { jump(cur + 1); });
+        $('#pxPlay').addEventListener('click', function () { setPlay(!playing); });
+        $('#pxSpd').addEventListener('click', function () { speed = speed === 1 ? 2 : (speed === 2 ? .5 : 1); this.textContent = speed + '×'; t0 = performance.now(); });
+        $('#pxAllBtn').addEventListener('click', function () { var open = all.hidden; all.hidden = !open; this.setAttribute('aria-pressed', String(open)); if (open) setPlay(false); });
+        [flow, steps, all].forEach(function (c) {
+            c.addEventListener('click', function (e) {
+                var b = e.target.closest('[data-i]'); if (!b) return;
+                jump(+b.dataset.i);
+                if (c === all) { all.hidden = true; $('#pxAllBtn').setAttribute('aria-pressed', 'false'); }
+            });
+        });
+        show(0);
+        if (!playing) setPlay(false);
+        raf = requestAnimationFrame(loop);
+        document.addEventListener('visibilitychange', function () { if (document.hidden) cancelAnimationFrame(raf); else { t0 = performance.now(); raf = requestAnimationFrame(loop); } });
+    })();
+
+    /* ---------- tilt ---------- */
+    if (!reduceMotion && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+        $$('.tilt').forEach(function (el) {
+            el.addEventListener('mousemove', function (e) {
+                var r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+                el.style.transform = 'rotateY(' + x * 5 + 'deg) rotateX(' + -y * 5 + 'deg)';
+            });
+            el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+        });
+    }
+
+    /* ---------- custom cursor ---------- */
+    if (!reduceMotion && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+        var dot = $('#cursorDot'), ring = $('#cursorRing'), mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', function (e) {
+            mx = e.clientX; my = e.clientY;
+            dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+            root.classList.add('cursor-on');
+        });
+        document.addEventListener('mouseleave', function () { root.classList.remove('cursor-on'); });
+        document.addEventListener('mouseover', function (e) {
+            root.classList.toggle('cursor-hover', !!e.target.closest('a,button,input,textarea,select,.tech-chip,.hobby'));
+        });
+        (function follow() {
+            rx += (mx - rx) * .18; ry += (my - ry) * .18;
+            ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+            requestAnimationFrame(follow);
+        })();
+    }
+
+    /* ---------- hero terminal ---------- */
+    (function () {
+        var form = $('#heroAsk'), input = $('#heroAskInput'), out = $('#heroAskOut');
+        var C = {
+            help: 'available commands:\n  <span class="g">whoami</span>      who is this?\n  <span class="g">stack</span>       core tools\n  <span class="g">experience</span>  career summary\n  <span class="g">education</span>   degrees\n  <span class="g">available?</span>  current status\n  <span class="g">contact</span>     how to reach me\n  <span class="g">clear</span>       clear the screen',
+            whoami: 'Ram Vibhul Aanandh\nSenior DevOps Engineer / Site Reliability Engineer\n10+ years · India',
+            stack: 'cloud     AWS · GCP · Azure · OpenStack\ncompute   Kubernetes · GKE · Docker · Helm\niac       Terraform · Ansible · CloudFormation\nci/cd     GitHub Actions · Jenkins · ArgoCD\nobserve   Prometheus · Grafana · ELK · Loki\nlang      Python · Go · Bash',
+            experience: '2023–now   Senior DevOps Engineer · Severalnines\n2021–2023  Senior Cloud Engineer · HomeToGo\n2019–2022  Lead Cloud Engineer / SRE · Freshworks\n2018–2019  Senior DevOps Engineer · Robert Bosch GmbH\n2015–2018  DevOps → Senior Cloud Engineer · Infosys',
+            education: "Master's, Technology · PSG Institute of Technology (2012–2014)\nBachelor's, Technology · Dr. Mahalingam College of Engineering & Technology (2008–2012)",
+            'available?': '<span class="g">●</span> Open to opportunities\nroles: DevOps · SRE · Infrastructure · Platform\nauthorized to work in India and Lithuania',
+            contact: 'linkedin   linkedin.com/in/ram-vibhulaanandh-venkatraman-elango-3661a027\nprofile    himalayas.app/@ramvibhulaanandh\nmessage    scroll to #contact'
+        };
+        C.skills = C.stack; C.available = C['available?']; C.ls = C.help;
+        function run(q) {
+            q = q.trim().toLowerCase();
+            if (!q) return;
+            if (q === 'clear') { out.innerHTML = ''; out.hidden = true; return; }
+            var res = C[q] || ('<span class="m">command not found: ' + esc(q) + '. try “help”</span>');
+            out.hidden = false;
+            out.innerHTML += (out.innerHTML ? '\n\n' : '') + '<span class="p">ram@sre:~$</span> ' + esc(q) + '\n' + res;
+            out.scrollTop = out.scrollHeight;
+            if (q === 'contact') setTimeout(function () { $('#contact').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); }, 900);
+        }
+        form.addEventListener('submit', function (e) { e.preventDefault(); run(input.value); input.value = ''; });
+        $$('.ha-chip').forEach(function (b) { b.addEventListener('click', function () { run(b.dataset.q); }); });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); }
+        });
+    })();
+
+    /* ---------- contact form (Netlify Forms, AJAX) ---------- */
+    (function () {
+        var form = $('#contactForm'), status = $('#cfStatus'), btn = $('.cf-submit', form);
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            btn.disabled = true; status.className = 'cf-status'; status.textContent = 'Sending…';
+            fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)).toString() })
+                .then(function (r) {
+                    if (!r.ok) throw new Error(r.status);
+                    form.reset();
+                    status.className = 'cf-status ok';
+                    status.textContent = '✓ Message sent. Thanks, I’ll get back to you soon.';
+                })
+                .catch(function () {
+                    status.className = 'cf-status err';
+                    status.textContent = 'Something went wrong. Please try again or reach out on LinkedIn.';
+                })
+                .finally(function () { btn.disabled = false; });
+        });
+    })();
+
+    /* ---------- reveal on scroll ---------- */
+    var revealIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
+    }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+    $$('.reveal').forEach(function (el) { revealIO.observe(el); });
+
+    $('#year').textContent = new Date().getFullYear();
+})();
